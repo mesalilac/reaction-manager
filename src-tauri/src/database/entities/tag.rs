@@ -17,3 +17,21 @@ impl TagEntity {
         }
     }
 }
+
+#[derive(specta::Type, Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Tag {
+    pub id: String,
+    pub name: String,
+    pub created_at: Timestamp,
+}
+
+impl Tag {
+    pub fn from_entity(entity: TagEntity) -> Self {
+        Self {
+            id: entity.id,
+            name: entity.name,
+            created_at: entity.created_at,
+        }
+    }
+}

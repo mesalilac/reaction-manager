@@ -29,3 +29,35 @@ impl ImageEntity {
         }
     }
 }
+
+#[derive(specta::Type, Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Image {
+    pub id: String,
+    pub description: Option<String>,
+    pub external_link: Option<String>,
+    pub use_counter: i32,
+    pub last_used_at: Option<Timestamp>,
+    pub file_path: String,
+    pub is_favorite: bool,
+    pub blur_hash: String,
+    pub tags: Vec<Tag>,
+    pub created_at: Timestamp,
+}
+
+impl Image {
+    pub fn from_entity(entity: ImageEntity, tags: Vec<Tag>) -> Self {
+        Self {
+            id: entity.id,
+            description: entity.description,
+            external_link: entity.external_link,
+            use_counter: entity.use_counter,
+            last_used_at: entity.last_used_at,
+            file_path: entity.file_path,
+            is_favorite: entity.is_favorite,
+            blur_hash: entity.blur_hash,
+            tags,
+            created_at: entity.created_at,
+        }
+    }
+}

@@ -1,8 +1,10 @@
 pub mod prelude {
+    pub use super::Tag;
     pub use crate::database::types::*;
     pub use crate::schema::*;
     pub use diesel::prelude::*;
     pub use nanoid::nanoid;
+    pub use serde::{Deserialize, Serialize};
 }
 
 mod audio;
