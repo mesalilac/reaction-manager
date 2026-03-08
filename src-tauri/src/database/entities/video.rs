@@ -9,6 +9,7 @@ pub struct VideoEntity {
     pub use_counter: i32,
     pub last_used_at: Option<Timestamp>,
     pub file_path: String,
+    pub mime_type: String,
     pub file_size: i64,
     pub width: i32,
     pub height: i32,
@@ -18,7 +19,14 @@ pub struct VideoEntity {
 }
 
 impl VideoEntity {
-    pub fn new(file_path: String, file_size: i64, width: i32, height: i32, duration: i32) -> Self {
+    pub fn new(
+        file_path: String,
+        mime_type: String,
+        file_size: i64,
+        width: i32,
+        height: i32,
+        duration: i32,
+    ) -> Self {
         Self {
             id: nanoid!(),
             description: None,
@@ -26,6 +34,7 @@ impl VideoEntity {
             use_counter: 0,
             last_used_at: None,
             file_path,
+            mime_type,
             file_size,
             width,
             height,
@@ -45,6 +54,7 @@ pub struct Video {
     pub use_counter: i32,
     pub last_used_at: Option<Timestamp>,
     pub file_path: String,
+    pub mime_type: String,
     pub file_size: i64,
     pub width: i32,
     pub height: i32,
@@ -63,6 +73,7 @@ impl Video {
             use_counter: entity.use_counter,
             last_used_at: entity.last_used_at,
             file_path: entity.file_path,
+            mime_type: entity.mime_type,
             file_size: entity.file_size,
             width: entity.width,
             height: entity.height,

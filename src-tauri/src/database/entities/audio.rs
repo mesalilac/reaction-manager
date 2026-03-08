@@ -9,6 +9,7 @@ pub struct AudioEntity {
     pub use_counter: i32,
     pub last_used_at: Option<Timestamp>,
     pub file_path: String,
+    pub mime_type: String,
     pub file_size: i64,
     pub duration: i32,
     pub is_favorite: bool,
@@ -16,7 +17,7 @@ pub struct AudioEntity {
 }
 
 impl AudioEntity {
-    pub fn new(file_path: String, file_size: i64, duration: i32) -> Self {
+    pub fn new(file_path: String, mime_type: String, file_size: i64, duration: i32) -> Self {
         Self {
             id: nanoid!(),
             description: None,
@@ -24,6 +25,7 @@ impl AudioEntity {
             use_counter: 0,
             last_used_at: None,
             file_path,
+            mime_type,
             file_size,
             duration,
             is_favorite: false,
@@ -41,6 +43,7 @@ pub struct Audio {
     pub use_counter: i32,
     pub last_used_at: Option<Timestamp>,
     pub file_path: String,
+    pub mime_type: String,
     pub file_size: i64,
     pub duration: i32,
     pub is_favorite: bool,
@@ -57,6 +60,7 @@ impl Audio {
             use_counter: entity.use_counter,
             last_used_at: entity.last_used_at,
             file_path: entity.file_path,
+            mime_type: entity.mime_type,
             file_size: entity.file_size,
             duration: entity.duration,
             is_favorite: entity.is_favorite,

@@ -8,6 +8,7 @@ diesel::table! {
         use_counter -> Integer,
         last_used_at -> Nullable<BigInt>,
         file_path -> Text,
+        mime_type -> Text,
         file_size -> BigInt,
         duration -> Integer,
         is_favorite -> Nullable<Bool>,
@@ -30,6 +31,7 @@ diesel::table! {
         use_counter -> Integer,
         last_used_at -> Nullable<BigInt>,
         file_path -> Text,
+        mime_type -> Text,
         file_size -> BigInt,
         width -> Integer,
         height -> Integer,
@@ -49,7 +51,6 @@ diesel::table! {
 diesel::table! {
     settings (id) {
         id -> Integer,
-        library_path -> Nullable<Text>,
         minimize_on_copy -> Bool,
     }
 }
@@ -90,6 +91,7 @@ diesel::table! {
         use_counter -> Integer,
         last_used_at -> Nullable<BigInt>,
         file_path -> Text,
+        mime_type -> Text,
         file_size -> BigInt,
         width -> Integer,
         height -> Integer,
