@@ -8,6 +8,7 @@ CREATE TABLE
         file_path TEXT NOT NULL UNIQUE,
         mime_type TEXT NOT NULL,
         file_size BIGINT NOT NULL,
+        checksum TEXT NOT NULL UNIQUE,
         width INT NOT NULL CHECK (width >= 0),
         height INT NOT NULL CHECK (height >= 0),
         is_favorite BOOLEAN DEFAULT 0 CHECK (is_favorite IN (0, 1)),
@@ -25,6 +26,7 @@ CREATE TABLE
         file_path TEXT NOT NULL UNIQUE,
         mime_type TEXT NOT NULL,
         file_size BIGINT NOT NULL,
+        checksum TEXT NOT NULL UNIQUE,
         width INT NOT NULL CHECK (width >= 0),
         height INT NOT NULL CHECK (height >= 0),
         duration INT NOT NULL CHECK (duration >= 0),
@@ -42,6 +44,7 @@ CREATE TABLE
         file_path TEXT NOT NULL UNIQUE,
         mime_type TEXT NOT NULL,
         file_size BIGINT NOT NULL,
+        checksum TEXT NOT NULL UNIQUE,
         duration INT NOT NULL CHECK (duration >= 0),
         is_favorite BOOLEAN DEFAULT 0 CHECK (is_favorite IN (0, 1)),
         created_at BIGINT NOT NULL
