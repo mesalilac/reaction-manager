@@ -94,7 +94,6 @@ CREATE TABLE
 CREATE TABLE
     settings (
         id INT NOT NULL PRIMARY KEY CHECK (id = 1),
-        library_path TEXT,
         minimize_on_copy BOOLEAN NOT NULL DEFAULT 0 CHECK (minimize_on_copy IN (0, 1))
     );
 

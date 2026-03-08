@@ -4,7 +4,6 @@ use super::prelude::*;
 #[diesel(table_name = settings)]
 pub struct SettingEntity {
     pub id: i32,
-    pub library_path: Option<String>,
     pub minimize_on_copy: bool,
 }
 
@@ -12,7 +11,6 @@ pub struct SettingEntity {
 #[serde(rename_all = "camelCase")]
 pub struct Setting {
     pub id: i32,
-    pub library_path: Option<String>,
     pub minimize_on_copy: bool,
 }
 
@@ -20,7 +18,6 @@ impl Setting {
     pub fn from_entity(entity: SettingEntity) -> Self {
         Self {
             id: entity.id,
-            library_path: entity.library_path,
             minimize_on_copy: entity.minimize_on_copy,
         }
     }
