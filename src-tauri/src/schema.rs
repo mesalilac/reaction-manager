@@ -93,6 +93,7 @@ diesel::table! {
         use_counter -> Integer,
         last_used_at -> Nullable<BigInt>,
         file_path -> Text,
+        thumbnail_path -> Nullable<Text>,
         mime_type -> Text,
         file_size -> BigInt,
         checksum -> Text,

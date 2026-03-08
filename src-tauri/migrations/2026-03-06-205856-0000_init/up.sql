@@ -24,6 +24,7 @@ CREATE TABLE
         use_counter INT NOT NULL DEFAULT 0 CHECK (use_counter >= 0),
         last_used_at BIGINT,
         file_path TEXT NOT NULL UNIQUE,
+        thumbnail_path TEXT UNIQUE,
         mime_type TEXT NOT NULL,
         file_size BIGINT NOT NULL,
         checksum TEXT NOT NULL UNIQUE,
