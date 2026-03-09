@@ -79,16 +79,3 @@ pub fn get_app_thumbnails_dir() -> PathBuf {
 
     app_thumbnails_dir
 }
-
-/// Returns the temp directory.
-///
-/// Place to store temp files for downloading
-pub fn get_app_temp_dir() -> PathBuf {
-    let app_temp_dir = get_app_media_dir().join("temp");
-
-    if !app_temp_dir.exists() {
-        std::fs::create_dir_all(&app_temp_dir).expect("Failed to create temp dir");
-    }
-
-    app_temp_dir
-}
