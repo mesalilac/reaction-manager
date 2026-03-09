@@ -1,8 +1,14 @@
+use super::prelude::*;
+use crate::utils::fs::get_app_audio_dir;
 use std::path::PathBuf;
 
-use crate::utils::fs::get_app_audio_dir;
-
-use super::prelude::*;
+pub struct AudioMetadata {
+    pub file_path: PathBuf,
+    pub mime_type: String,
+    pub file_size: i64,
+    pub checksum: String,
+    pub duration: i32,
+}
 
 #[derive(Queryable, Selectable, Insertable, Identifiable, Debug, Clone)]
 #[diesel(table_name = audio)]
@@ -24,13 +30,7 @@ pub struct AudioEntity {
 }
 
 impl AudioEntity {
-    pub fn new(
-        file_path: PathBuf,
-        mime_type: String,
-        file_size: i64,
-        checksum: String,
-        duration: i32,
-    ) -> Self {
+    pub fn new(metadata: AudioMetadata) -> Self {
         Self {
             id: nanoid!(),
             title: None,
@@ -38,11 +38,11 @@ impl AudioEntity {
             external_link: None,
             use_counter: 0,
             last_used_at: None,
-            file_path: file_path.to_string_lossy().to_string(),
-            mime_type,
-            file_size,
-            checksum,
-            duration,
+            file_path: metadata.file_path.to_string_lossy().to_string(),
+            mime_type: metadata.mime_type,
+            file_size: metadata.file_size,
+            checksum: metadata.checksum,
+            duration: metadata.duration,
             is_favorite: false,
             deleted_at: None,
             created_at: Timestamp::now(),

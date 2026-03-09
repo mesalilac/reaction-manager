@@ -1,8 +1,16 @@
+use super::prelude::*;
+use crate::utils::fs::get_app_images_dir;
 use std::path::PathBuf;
 
-use crate::utils::fs::get_app_images_dir;
-
-use super::prelude::*;
+pub struct ImageMetadata {
+    pub file_path: PathBuf,
+    pub mime_type: String,
+    pub file_size: i64,
+    pub checksum: String,
+    pub width: i32,
+    pub height: i32,
+    pub blur_hash: String,
+}
 
 #[derive(Queryable, Selectable, Insertable, Identifiable, Debug, Clone)]
 #[diesel(table_name = images)]
@@ -26,15 +34,7 @@ pub struct ImageEntity {
 }
 
 impl ImageEntity {
-    pub fn new(
-        file_path: PathBuf,
-        mime_type: String,
-        file_size: i64,
-        checksum: String,
-        width: i32,
-        height: i32,
-        blur_hash: String,
-    ) -> Self {
+    pub fn from_metadata(metadata: ImageMetadata) -> Self {
         Self {
             id: nanoid!(),
             title: None,
@@ -42,14 +42,14 @@ impl ImageEntity {
             external_link: None,
             use_counter: 0,
             last_used_at: None,
-            file_path: file_path.to_string_lossy().to_string(),
-            mime_type,
-            file_size,
-            checksum,
-            width,
-            height,
+            file_path: metadata.file_path.to_string_lossy().to_string(),
+            mime_type: metadata.mime_type,
+            file_size: metadata.file_size,
+            checksum: metadata.checksum,
+            width: metadata.width,
+            height: metadata.height,
             is_favorite: false,
-            blur_hash,
+            blur_hash: metadata.blur_hash,
             deleted_at: None,
             created_at: Timestamp::now(),
         }

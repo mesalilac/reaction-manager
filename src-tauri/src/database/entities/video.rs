@@ -1,8 +1,17 @@
+use super::prelude::*;
+use crate::utils::fs::{get_app_thumbnails_dir, get_app_videos_dir};
 use std::path::PathBuf;
 
-use crate::utils::fs::{get_app_thumbnails_dir, get_app_videos_dir};
-
-use super::prelude::*;
+pub struct VideoMetadata {
+    pub file_path: PathBuf,
+    pub mime_type: String,
+    pub file_size: i64,
+    pub checksum: String,
+    pub has_audio: bool,
+    pub width: i32,
+    pub height: i32,
+    pub duration: i32,
+}
 
 #[derive(Queryable, Selectable, Insertable, Identifiable, Debug, Clone)]
 #[diesel(table_name = videos)]
@@ -28,16 +37,7 @@ pub struct VideoEntity {
 }
 
 impl VideoEntity {
-    pub fn new(
-        file_path: PathBuf,
-        mime_type: String,
-        file_size: i64,
-        checksum: String,
-        has_audio: bool,
-        width: i32,
-        height: i32,
-        duration: i32,
-    ) -> Self {
+    pub fn new(metadata: VideoMetadata) -> Self {
         Self {
             id: nanoid!(),
             title: None,
@@ -45,15 +45,15 @@ impl VideoEntity {
             external_link: None,
             use_counter: 0,
             last_used_at: None,
-            file_path: file_path.to_string_lossy().to_string(),
+            file_path: metadata.file_path.to_string_lossy().to_string(),
             thumbnail_path: None,
-            mime_type,
-            file_size,
-            checksum,
-            has_audio,
-            width,
-            height,
-            duration,
+            mime_type: metadata.mime_type,
+            file_size: metadata.file_size,
+            checksum: metadata.checksum,
+            has_audio: metadata.has_audio,
+            width: metadata.width,
+            height: metadata.height,
+            duration: metadata.duration,
             is_favorite: false,
             deleted_at: None,
             created_at: Timestamp::now(),
