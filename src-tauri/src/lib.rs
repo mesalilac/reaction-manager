@@ -8,6 +8,7 @@ mod utils;
 
 use clap::Parser;
 use cli::Cli;
+use commands::*;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use specta_typescript::{BigIntExportBehavior, Typescript};
 use tauri::Manager;
@@ -61,13 +62,6 @@ pub fn biome(file: &std::path::Path) -> std::io::Result<()> {
     Ok(())
 }
 
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-#[tauri::command]
-#[specta::specta]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let cli = Cli::parse();
@@ -91,7 +85,14 @@ pub fn run() {
         };
     }
 
-    let specta_builder = Builder::<tauri::Wry>::new().commands(collect_commands![greet]);
+    let specta_builder = Builder::<tauri::Wry>::new().commands(collect_commands![
+        get_images,
+        get_videos,
+        get_audio,
+        get_snippets,
+        get_settings,
+        get_general_stats
+    ]);
 
     #[cfg(debug_assertions)]
     specta_builder

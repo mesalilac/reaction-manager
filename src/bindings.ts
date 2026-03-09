@@ -5,8 +5,56 @@
 /** user-defined commands **/
 
 export const commands = {
-    async greet(name: string): Promise<string> {
-        return await TAURI_INVOKE('greet', { name });
+    async getImages(): Promise<Result<Image[], CommandError>> {
+        try {
+            return { status: 'ok', data: await TAURI_INVOKE('get_images') };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
+    async getVideos(): Promise<Result<Video[], CommandError>> {
+        try {
+            return { status: 'ok', data: await TAURI_INVOKE('get_videos') };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
+    async getAudio(): Promise<Result<Audio[], CommandError>> {
+        try {
+            return { status: 'ok', data: await TAURI_INVOKE('get_audio') };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
+    async getSnippets(): Promise<Result<Snippet[], CommandError>> {
+        try {
+            return { status: 'ok', data: await TAURI_INVOKE('get_snippets') };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
+    async getSettings(): Promise<Result<Setting, CommandError>> {
+        try {
+            return { status: 'ok', data: await TAURI_INVOKE('get_settings') };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
+    async getGeneralStats(): Promise<Result<GeneralStats, CommandError>> {
+        try {
+            return {
+                status: 'ok',
+                data: await TAURI_INVOKE('get_general_stats'),
+            };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
     },
 };
 
@@ -15,6 +63,92 @@ export const commands = {
 /** user-defined constants **/
 
 /** user-defined types **/
+
+export type Audio = {
+    id: string;
+    title: string | null;
+    description: string | null;
+    externalLink: string | null;
+    useCounter: number;
+    lastUsedAt: Timestamp | null;
+    filePath: string;
+    mimeType: string;
+    fileSize: number;
+    checksum: string;
+    duration: number;
+    isFavorite: boolean;
+    tags: Tag[];
+    deletedAt: Timestamp | null;
+    createdAt: Timestamp;
+};
+export type CommandError =
+    | { kind: 'Database'; message: string }
+    | { kind: 'Io'; message: string }
+    | { kind: 'ScanFailure'; message: string }
+    | { kind: 'Unknown'; message: string };
+export type GeneralStats = {
+    imageCount: number;
+    videoCount: number;
+    audioCount: number;
+    snippetCount: number;
+    tagCount: number;
+};
+export type Image = {
+    id: string;
+    title: string | null;
+    description: string | null;
+    externalLink: string | null;
+    useCounter: number;
+    lastUsedAt: Timestamp | null;
+    filePath: string;
+    mimeType: string;
+    fileSize: number;
+    checksum: string;
+    width: number;
+    height: number;
+    isFavorite: boolean;
+    blurHash: string;
+    tags: Tag[];
+    deletedAt: Timestamp | null;
+    createdAt: Timestamp;
+};
+export type Setting = { id: number; minimizeOnCopy: boolean };
+export type Snippet = {
+    id: string;
+    title: string | null;
+    description: string | null;
+    content: string;
+    externalLink: string | null;
+    useCounter: number;
+    lastUsedAt: Timestamp | null;
+    isFavorite: boolean;
+    tags: Tag[];
+    deletedAt: Timestamp | null;
+    createdAt: Timestamp;
+};
+export type Tag = { id: string; name: string; createdAt: Timestamp };
+export type Timestamp = number;
+export type Video = {
+    id: string;
+    title: string | null;
+    description: string | null;
+    externalLink: string | null;
+    useCounter: number;
+    lastUsedAt: Timestamp | null;
+    filePath: string;
+    thumbnailPath: string | null;
+    mimeType: string;
+    fileSize: number;
+    checksum: string;
+    hasAudio: boolean;
+    width: number;
+    height: number;
+    duration: number;
+    isFavorite: boolean;
+    tags: Tag[];
+    deletedAt: Timestamp | null;
+    createdAt: Timestamp;
+};
 
 /** tauri-specta globals **/
 
