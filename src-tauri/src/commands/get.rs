@@ -107,6 +107,21 @@ pub async fn get_snippets(state: AppState<'_>) -> CommandResult<Vec<Snippet>> {
 
 #[tauri::command]
 #[specta::specta]
+pub async fn get_tags(state: AppState<'_>) -> CommandResult<Vec<Tag>> {
+    let mut conn = state.pool.get()?;
+
+    let tag_entities = tags::table.load::<TagEntity>(&mut conn)?;
+
+    let data: Vec<Tag> = tag_entities
+        .into_iter()
+        .map(|x| Tag::from_entity(x))
+        .collect();
+
+    Ok(data)
+}
+
+#[tauri::command]
+#[specta::specta]
 pub async fn get_settings(state: AppState<'_>) -> CommandResult<Setting> {
     let mut conn = state.pool.get()?;
 

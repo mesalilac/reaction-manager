@@ -90,6 +90,7 @@ pub fn run() {
         get_videos,
         get_audio,
         get_snippets,
+        get_tags,
         get_settings,
         get_general_stats,
         util_drop_files
