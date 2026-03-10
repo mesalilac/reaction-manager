@@ -91,7 +91,8 @@ pub fn run() {
         get_audio,
         get_snippets,
         get_settings,
-        get_general_stats
+        get_general_stats,
+        util_drop_files
     ]);
 
     #[cfg(debug_assertions)]
