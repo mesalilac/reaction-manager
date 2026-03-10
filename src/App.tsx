@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { Toaster } from 'solid-toast';
-import { DragOverlay } from '@/components';
+import { DragOverlay, Main } from '@/components';
 import { GlobalDataProvider } from './store';
 
 function App() {
@@ -15,9 +15,8 @@ function App() {
                     },
                 }}
             />
-            <main>hi</main>
-
             <DragOverlay />
+            <Main />
         </GlobalDataProvider>
     );
 }

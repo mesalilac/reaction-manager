@@ -1,4 +1,3 @@
 /** biome-ignore-all assist/source/organizeImports: false */
 
-export * from './DragOverlay';
 export * from './Main';
