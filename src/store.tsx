@@ -24,7 +24,11 @@ export type ManagedResource<T> = {
     mutate: ResourceActions<T | undefined, unknown>['mutate'];
 };
 
-export type GlobalStore = {};
+export type TabType = 'Media' | 'Images' | 'Videos' | 'Audio' | 'Snippets';
+
+export type GlobalStore = {
+    activeTab: TabType;
+};
 
 export type GlobalData = {
     store: GlobalStore;
@@ -42,7 +46,9 @@ export type GlobalData = {
 };
 
 const createGlobalData = (): GlobalData => {
-    const [store, setStore] = createStore<GlobalStore>({});
+    const [store, setStore] = createStore<GlobalStore>({
+        activeTab: 'Media',
+    });
 
     const [images, imagesActions] = createResource(async () => {
         const res = await commands.getImages();

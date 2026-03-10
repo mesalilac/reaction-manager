@@ -1,5 +1,5 @@
 import { Toaster } from 'solid-sonner';
-import { DragOverlay, Main } from '@/components';
+import { DragOverlay, Main, Nav } from '@/components';
 import { GlobalDataProvider } from './store';
 
 function App() {
@@ -15,7 +15,10 @@ function App() {
                 visibleToasts={5}
             />
             <DragOverlay />
-            <Main />
+            <div class='flex flex-col gap-5'>
+                <Nav />
+                <Main />
+            </div>
         </GlobalDataProvider>
     );
 }
