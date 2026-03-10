@@ -37,6 +37,14 @@ export const commands = {
             else return { status: 'error', error: e as any };
         }
     },
+    async getTags(): Promise<Result<Tag[], CommandError>> {
+        try {
+            return { status: 'ok', data: await TAURI_INVOKE('get_tags') };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
     async getSettings(): Promise<Result<Setting, CommandError>> {
         try {
             return { status: 'ok', data: await TAURI_INVOKE('get_settings') };
