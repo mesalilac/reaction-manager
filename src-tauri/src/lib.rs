@@ -70,7 +70,7 @@ pub fn run() {
 
     env_builder.filter_level(log::LevelFilter::Info);
 
-    if cli.verbose {
+    if cli.verbose || cfg!(dev) {
         env_builder.filter_level(log::LevelFilter::Trace);
     }
 
