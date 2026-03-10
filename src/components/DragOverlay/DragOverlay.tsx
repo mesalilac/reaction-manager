@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import type { VoidComponent } from 'solid-js';
 import { createSignal, onCleanup, onMount } from 'solid-js';
 import { Portal } from 'solid-js/web';
+import toast from 'solid-toast';
+import { commands } from '@/bindings';
 
 type Props = {
     ref?: HTMLDivElement | ((el: HTMLDivElement) => void);
@@ -17,7 +19,15 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
         const dropListener = listen<Extract<DragDropEvent, { type: 'drop' }>>(
             TauriEvent.DRAG_DROP,
             (e) => {
-                console.log(e);
+                toast.promise(commands.utilDropFiles(e.payload.paths), {
+                    loading: 'Processing files',
+                    success: (e) => {
+                        if (e.status === 'ok')
+                            return `Files processed: ${e.data}`;
+                        else return `Processing error: ${e.error}`;
+                    },
+                    error: 'Failed to process files',
+                });
                 setIsDragActive(false);
             },
         );
