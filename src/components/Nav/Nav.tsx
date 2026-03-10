@@ -44,7 +44,7 @@ export const Nav: VoidComponent<Props> = (props) => {
                         class='flex cursor-pointer items-center gap-2 rounded-md bg-blue-500 px-3 py-1'
                         type='button'
                     >
-                        <IconAddPlus class='size-6 shrink-0' />
+                        <IconAddPlus class='size-6' />
                         <span>New</span>
                     </button>
                 </Show>
