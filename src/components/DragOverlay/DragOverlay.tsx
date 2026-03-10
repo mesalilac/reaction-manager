@@ -19,16 +19,19 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
         const dropListener = listen<Extract<DragDropEvent, { type: 'drop' }>>(
             TauriEvent.DRAG_DROP,
             (e) => {
+                setIsDragActive(false);
+
+                if (e.payload.paths.length === 0) return;
+
                 toast.promise(commands.utilDropFiles(e.payload.paths), {
-                    loading: 'Processing files',
+                    loading: `Processing ${filesCount()} file(s)`,
                     success: (e) => {
                         if (e.status === 'ok')
-                            return `Files processed: ${e.data}`;
+                            return `File(s) processed: ${e.data}`;
                         else return `Processing error: ${e.error}`;
                     },
-                    error: 'Failed to process files',
+                    error: 'Failed to process file(s)',
                 });
-                setIsDragActive(false);
             },
         );
 
