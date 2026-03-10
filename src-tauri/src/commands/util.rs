@@ -1,5 +1,5 @@
 use super::prelude::*;
-use crate::utils::fs::{get_app_images_dir, get_app_videos_dir};
+use crate::utils::fs::{get_app_audio_dir, get_app_images_dir, get_app_videos_dir};
 use diesel::dsl::{exists, select};
 use image::{EncodableLayout, ImageReader};
 use std::{io::Cursor, path::PathBuf};
@@ -186,6 +186,73 @@ pub async fn util_drop_files(state: AppState<'_>, paths: Vec<PathBuf>) -> Comman
 
                 if audio_exists {
                     continue;
+                }
+
+                let mss = MediaSourceStream::new(Box::new(cursor), Default::default());
+                let hint = Hint::new();
+                let format_opts = FormatOptions::default();
+                let metadata_opts = MetadataOptions::default();
+
+                let Ok(probed) = symphonia::default::get_probe().format(
+                    &hint,
+                    mss,
+                    &format_opts,
+                    &metadata_opts,
+                ) else {
+                    continue;
+                };
+
+                let mut format = probed.format;
+
+                let mut title: Option<String> = Some(file_name.clone());
+                let mut duration = 0;
+
+                if let Some(metadata) = format.metadata().current() {
+                    for tag in metadata.tags() {
+                        if let Some(StandardTagKey::TrackTitle) = tag.std_key {
+                            title = Some(tag.value.to_string());
+                            break;
+                        }
+                    }
+                };
+
+                for track in format.tracks() {
+                    let params = &track.codec_params;
+
+                    if let (Some(n_frames), Some(tb)) = (params.n_frames, params.time_base) {
+                        let total_seconds = n_frames as f64 * (tb.numer as f64 / tb.denom as f64);
+
+                        if total_seconds as i32 > duration {
+                            duration = total_seconds as i32;
+                        }
+                    }
+                }
+
+                let dest_file_path = get_app_audio_dir().join(PathBuf::from(&file_name));
+
+                let mut audio_entity = AudioEntity::from_metadata(AudioMetadata {
+                    file_name: file_name.clone(),
+                    mime_type: file_type.mime_type().to_string(),
+                    file_size,
+                    checksum,
+                    duration,
+                });
+
+                audio_entity.title = title;
+
+                match diesel::insert_into(audio::table)
+                    .values(&audio_entity)
+                    .execute(&mut conn)
+                {
+                    Ok(_) => {
+                        if std::fs::copy(entry_path, &dest_file_path).is_err() {
+                            continue;
+                        }
+                    }
+
+                    Err(_) => {
+                        continue;
+                    }
                 }
             }
 

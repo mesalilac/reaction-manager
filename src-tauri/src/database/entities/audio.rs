@@ -30,7 +30,7 @@ pub struct AudioEntity {
 }
 
 impl AudioEntity {
-    pub fn new(metadata: AudioMetadata) -> Self {
+    pub fn from_metadata(metadata: AudioMetadata) -> Self {
         Self {
             id: nanoid!(),
             title: None,
