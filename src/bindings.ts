@@ -56,6 +56,19 @@ export const commands = {
             else return { status: 'error', error: e as any };
         }
     },
+    async utilDropFiles(
+        paths: string[],
+    ): Promise<Result<number, CommandError>> {
+        try {
+            return {
+                status: 'ok',
+                data: await TAURI_INVOKE('util_drop_files', { paths }),
+            };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
 };
 
 /** user-defined events **/
