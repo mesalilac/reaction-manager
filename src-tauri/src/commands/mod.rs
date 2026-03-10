@@ -9,9 +9,6 @@ pub enum CommandError {
     #[error("Filesystem error: {0}")]
     Io(String),
 
-    #[error("Failed to scan library: {0}")]
-    ScanFailure(String),
-
     #[error("An unexpected error occurred: {0}")]
     Unknown(String),
 }
