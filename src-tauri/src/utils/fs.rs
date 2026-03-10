@@ -1,12 +1,14 @@
 use crate::APP_NAME;
-use std::path::PathBuf;
+use std::path::{absolute, PathBuf};
 
 /// Returns the app data directory.
 ///
 /// This is where the database and media are stored
 pub fn get_app_data_dir() -> PathBuf {
     let app_data_dir = if cfg!(dev) {
-        PathBuf::from("../dev-data")
+        let dir = "../dev-data";
+
+        absolute(PathBuf::from(dir)).unwrap_or(PathBuf::from(dir))
     } else {
         directories::BaseDirs::new()
             .expect("Failed to get base dir")
