@@ -49,6 +49,7 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
                     'pointer-events-none fixed inset-0 z-50 flex scale-150 items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-150',
                     { 'pointer-events-none opacity-0': !isDragActive() },
                 )}
+                ref={props.ref}
             >
                 <div class='flex flex-col items-center gap-3 rounded-xl border-2 border-white/40 border-dashed bg-white/10 px-13 py-10 text-white shadow-xl'>
                     <p>Drop {filesCount()} file(s) here</p>
