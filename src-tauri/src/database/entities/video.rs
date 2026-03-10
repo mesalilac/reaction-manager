@@ -35,7 +35,7 @@ pub struct VideoEntity {
 }
 
 impl VideoEntity {
-    pub fn new(metadata: VideoMetadata) -> Self {
+    pub fn from_metadata(metadata: VideoMetadata) -> Self {
         Self {
             id: nanoid!(),
             title: None,
