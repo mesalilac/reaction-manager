@@ -6,7 +6,7 @@ use crate::{
 use std::path::PathBuf;
 
 pub struct VideoMetadata {
-    pub file_path: PathBuf,
+    pub file_name: String,
     pub mime_type: String,
     pub file_size: i64,
     pub checksum: String,
@@ -48,7 +48,7 @@ impl VideoEntity {
             external_link: None,
             use_counter: 0,
             last_used_at: None,
-            file_path: metadata.file_path.to_string_lossy().to_string(),
+            file_path: metadata.file_name,
             thumbnail_path: None,
             mime_type: metadata.mime_type,
             file_size: metadata.file_size,

@@ -61,7 +61,7 @@ pub async fn util_drop_files(state: AppState<'_>, paths: Vec<PathBuf>) -> Comman
                 let dest_file_path = get_app_images_dir().join(PathBuf::from(&file_name));
 
                 let mut image_entity = ImageEntity::from_metadata(ImageMetadata {
-                    file_path: dest_file_path,
+                    file_name: file_name.clone(),
                     mime_type: file_type.mime_type().to_string(),
                     file_size,
                     checksum,
@@ -77,7 +77,7 @@ pub async fn util_drop_files(state: AppState<'_>, paths: Vec<PathBuf>) -> Comman
                     .execute(&mut conn)
                 {
                     Ok(_) => {
-                        if std::fs::copy(entry_path, &image_entity.file_path).is_err() {
+                        if std::fs::copy(entry_path, &dest_file_path).is_err() {
                             continue;
                         }
                     }

@@ -3,7 +3,7 @@ use crate::{commands::prelude::TagEntity, utils::fs::get_app_audio_dir};
 use std::path::PathBuf;
 
 pub struct AudioMetadata {
-    pub file_path: PathBuf,
+    pub file_name: String,
     pub mime_type: String,
     pub file_size: i64,
     pub checksum: String,
@@ -38,7 +38,7 @@ impl AudioEntity {
             external_link: None,
             use_counter: 0,
             last_used_at: None,
-            file_path: metadata.file_path.to_string_lossy().to_string(),
+            file_path: metadata.file_name,
             mime_type: metadata.mime_type,
             file_size: metadata.file_size,
             checksum: metadata.checksum,
