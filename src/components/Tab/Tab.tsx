@@ -6,6 +6,7 @@ import {
     onCleanup,
     type VoidComponent,
 } from 'solid-js';
+import { Label } from '@/components';
 import { type TabType, useGlobalData } from '@/store';
 
 type Props = {
@@ -52,9 +53,7 @@ export const Tab: VoidComponent<Props> = (props) => {
             type='button'
         >
             {props.type}
-            <span class='inline-flex items-center justify-center rounded-full bg-neutral-100/10 px-1 font-medium text-neutral-100 text-xs'>
-                {count()}
-            </span>
+            <Label>{count()}</Label>
         </button>
     );
 };

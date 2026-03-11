@@ -7,3 +7,4 @@ export * from './Tab';
 export * from './Nav';
 export * from './Button';
 export * from './ButtonIcon';
+export * from './Label';
