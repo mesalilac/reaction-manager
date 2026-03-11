@@ -5,5 +5,5 @@ type Props = {
 };
 
 export const Main: VoidComponent<Props> = (props) => {
-    return <main ref={props.ref}>hi</main>;
+    return <main class='flex gap-2' ref={props.ref}></main>;
 };
