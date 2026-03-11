@@ -108,7 +108,6 @@ pub fn run() {
         .expect("Failed to export typescript bindings");
 
     tauri::Builder::default()
-        .plugin(tauri_plugin_clipboard_manager::init())
         .manage(AppState { pool })
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             let _ = app
@@ -117,6 +116,7 @@ pub fn run() {
                 .set_focus();
         }))
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
         .invoke_handler(specta_builder.invoke_handler())
         .setup(move |app| {
             specta_builder.mount_events(app);
