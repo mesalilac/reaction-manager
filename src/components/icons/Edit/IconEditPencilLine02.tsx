@@ -20,8 +20,8 @@ export const IconEditPencilLine02 = (props: IconProps) => {
         <svg
             role='img'
             aria-label='Edit Pencil Line02'
-            width={pickedProps.size || '1em'}
-            height={pickedProps.size || '1em'}
+            width={pickedProps.size || '1.25rem'}
+            height={pickedProps.size || '1.25rem'}
             viewBox='0 0 24 24'
             fill='none'
             {...otherProps}
