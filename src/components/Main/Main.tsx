@@ -10,15 +10,17 @@ export const Main: VoidComponent<Props> = (props) => {
     const globalData = useGlobalData();
 
     return (
-        <main class='flex flex-col' ref={props.ref}>
+        <main ref={props.ref}>
             <Switch>
                 <Match when={globalData.store.activeTab === 'Media'}>
                     todo!
                 </Match>
                 <Match when={globalData.store.activeTab === 'Images'}>
-                    <For each={globalData.resources.images.get() || []}>
-                        {(item) => <ImageCard image={item} />}
-                    </For>
+                    <div class='grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4'>
+                        <For each={globalData.resources.images.get() || []}>
+                            {(item) => <ImageCard image={item} />}
+                        </For>
+                    </div>
                 </Match>
                 <Match when={globalData.store.activeTab === 'Videos'}>
                     <For each={globalData.resources.videos.get() || []}>
