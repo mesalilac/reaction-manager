@@ -9,7 +9,6 @@ type Props = {
 export const Main: VoidComponent<Props> = (props) => {
     const globalData = useGlobalData();
 
-    const mediaTabActive = () => globalData.store.activeTab === 'Media';
     const imagesTabActive = () => globalData.store.activeTab === 'Images';
     const videosTabActive = () => globalData.store.activeTab === 'Videos';
     const audioTabActive = () => globalData.store.activeTab === 'Audio';
@@ -21,7 +20,6 @@ export const Main: VoidComponent<Props> = (props) => {
             ref={props.ref}
         >
             <Switch>
-                <Match when={mediaTabActive()}>todo!</Match>
                 <Match when={imagesTabActive()}>
                     <For each={globalData.resources.images.get() || []}>
                         {(item) => <ImageCard image={item} />}

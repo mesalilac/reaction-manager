@@ -15,18 +15,9 @@ type Props = {
 export const Nav: VoidComponent<Props> = (props) => {
     const globalData = useGlobalData();
 
-    const mediaCount = createMemo(() => {
-        const images = globalData.resources.images.get()?.length || 0;
-        const videos = globalData.resources.videos.get()?.length || 0;
-        const audio = globalData.resources.audio.get()?.length || 0;
-
-        return images + videos + audio;
-    });
-
     return (
         <div class='flex justify-between'>
             <div class='flex gap-3' ref={props.ref}>
-                <Tab count={mediaCount()} type='Media' />
                 <Tab
                     count={globalData.resources.images.get()?.length || 0}
                     type='Images'
