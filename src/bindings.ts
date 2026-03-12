@@ -77,6 +77,50 @@ export const commands = {
             else return { status: 'error', error: e as any };
         }
     },
+    async utilCopyImage(id: string): Promise<Result<null, CommandError>> {
+        try {
+            return {
+                status: 'ok',
+                data: await TAURI_INVOKE('util_copy_image', { id }),
+            };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
+    async utilCopyVideo(id: string): Promise<Result<null, CommandError>> {
+        try {
+            return {
+                status: 'ok',
+                data: await TAURI_INVOKE('util_copy_video', { id }),
+            };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
+    async utilCopyAudio(id: string): Promise<Result<null, CommandError>> {
+        try {
+            return {
+                status: 'ok',
+                data: await TAURI_INVOKE('util_copy_audio', { id }),
+            };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
+    async utilCopySnippet(id: string): Promise<Result<null, CommandError>> {
+        try {
+            return {
+                status: 'ok',
+                data: await TAURI_INVOKE('util_copy_snippet', { id }),
+            };
+        } catch (e) {
+            if (e instanceof Error) throw e;
+            else return { status: 'error', error: e as any };
+        }
+    },
 };
 
 /** user-defined events **/
@@ -105,6 +149,7 @@ export type Audio = {
 export type CommandError =
     | { kind: 'Database'; message: string }
     | { kind: 'Io'; message: string }
+    | { kind: 'Clipboard'; message: string }
     | { kind: 'Unknown'; message: string };
 export type GeneralStats = {
     imageCount: number;
