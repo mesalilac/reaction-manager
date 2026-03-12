@@ -1,7 +1,8 @@
 import { convertFileSrc } from '@tauri-apps/api/core';
 import { decode } from 'blurhash';
 import { createSignal, onMount, Show, type VoidComponent } from 'solid-js';
-import type { Image } from '@/bindings';
+import { toast } from 'solid-sonner';
+import { commands, type Image } from '@/bindings';
 import { Button, ButtonIcon, IconMoreVertical } from '@/components';
 
 type Props = {
@@ -36,6 +37,24 @@ export const ImageCard: VoidComponent<Props> = (props) => {
         }
     });
 
+    const handleCopy = async () => {
+        const res = await commands.utilCopyImage(props.image.id).catch((e) => {
+            toast.error(e);
+        });
+
+        if (!res) return;
+
+        if (res.status === 'error') {
+            toast.error(res.error.kind, {
+                description: res.error.message,
+            });
+
+            return;
+        }
+
+        toast.success('Image copied to clipboard');
+    };
+
     return (
         <div
             class='flex flex-col gap-4 rounded-lg bg-neutral-900 p-4'
@@ -57,7 +76,9 @@ export const ImageCard: VoidComponent<Props> = (props) => {
             </div>
             <div class='flex flex-row justify-between'>
                 <div class='flex flex-row gap-2'>
-                    <Button variant='primary'>Copy</Button>
+                    <Button onClick={handleCopy} variant='primary'>
+                        Copy
+                    </Button>
                 </div>
                 <div class='flex flex-row gap-2'>
                     <ButtonIcon>
