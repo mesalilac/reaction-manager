@@ -9,6 +9,7 @@ use symphonia::core::{
     meta::{MetadataOptions, StandardTagKey},
     probe::Hint,
 };
+use tauri_plugin_clipboard_next::ClipboardNextExt;
 use walkdir::WalkDir;
 
 #[tauri::command]
@@ -261,4 +262,58 @@ pub async fn util_drop_files(state: AppState<'_>, paths: Vec<PathBuf>) -> Comman
     }
 
     Ok(total_processed_files)
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn util_copy_image(
+    state: AppState<'_>,
+    app_handle: tauri::AppHandle,
+    id: String,
+) -> CommandResult<()> {
+    let mut conn = state.pool.get()?;
+
+    let image_entity = images::table
+        .find(id)
+        .get_result::<ImageEntity>(&mut conn)?;
+
+    let image = Image::from_entity(image_entity, Vec::new());
+
+    let clipboard = app_handle.clipboard_next();
+
+    clipboard
+        .write_image(image.file_path.to_string_lossy().to_string())
+        .map_err(|e| CommandError::Clipboard(e.to_string()))?;
+
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn util_copy_video(
+    state: AppState<'_>,
+    app_handle: tauri::AppHandle,
+    id: String,
+) -> CommandResult<()> {
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn util_copy_audio(
+    state: AppState<'_>,
+    app_handle: tauri::AppHandle,
+    id: String,
+) -> CommandResult<()> {
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn util_copy_snippet(
+    state: AppState<'_>,
+    app_handle: tauri::AppHandle,
+    id: String,
+) -> CommandResult<()> {
+    Ok(())
 }

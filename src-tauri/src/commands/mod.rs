@@ -9,6 +9,9 @@ pub enum CommandError {
     #[error("Filesystem error: {0}")]
     Io(String),
 
+    #[error("Clipboard manager error: {0}")]
+    Clipboard(String),
+
     #[error("An unexpected error occurred: {0}")]
     Unknown(String),
 }
