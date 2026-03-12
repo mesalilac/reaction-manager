@@ -1,5 +1,5 @@
 import { convertFileSrc } from '@tauri-apps/api/core';
-import { createEffect, type VoidComponent } from 'solid-js';
+import { onMount, type VoidComponent } from 'solid-js';
 import type { Video } from '@/bindings';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 export const VideoCard: VoidComponent<Props> = (props) => {
     let videoRef!: HTMLVideoElement;
 
-    createEffect(() => {
+    onMount(() => {
         if (videoRef) videoRef.volume = 0.1;
     });
 

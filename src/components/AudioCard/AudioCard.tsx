@@ -1,5 +1,5 @@
 import { convertFileSrc } from '@tauri-apps/api/core';
-import { createEffect, type VoidComponent } from 'solid-js';
+import { onMount, type VoidComponent } from 'solid-js';
 import type { Audio } from '@/bindings';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 export const AudioCard: VoidComponent<Props> = (props) => {
     let audioRef!: HTMLAudioElement;
 
-    createEffect(() => {
+    onMount(() => {
         if (audioRef) audioRef.volume = 0.1;
     });
 
