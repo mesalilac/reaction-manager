@@ -25,6 +25,8 @@
     html,
     body {
         scrollbar-width: none;
+        font-family: "Ioskeley Mono", monospace;
+        line-height: 1.5;
     }
 }
 
