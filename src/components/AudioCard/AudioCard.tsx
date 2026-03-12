@@ -1,4 +1,5 @@
-import type { VoidComponent } from 'solid-js';
+import { convertFileSrc } from '@tauri-apps/api/core';
+import { createEffect, type VoidComponent } from 'solid-js';
 import type { Audio } from '@/bindings';
 
 type Props = {
@@ -7,5 +8,27 @@ type Props = {
 };
 
 export const AudioCard: VoidComponent<Props> = (props) => {
-    return <div ref={props.ref}>{props.audio.title}</div>;
+    let audioRef!: HTMLAudioElement;
+
+    createEffect(() => {
+        if (audioRef) audioRef.volume = 0.1;
+    });
+
+    return (
+        <div
+            class='flex h-80 flex-col gap-4 rounded-lg bg-neutral-900 p-4'
+            ref={props.ref}
+        >
+            <audio class='w-full' controls ref={audioRef}>
+                <source
+                    src={convertFileSrc(props.audio.filePath)}
+                    type={props.audio.mimeType}
+                />
+                <track kind='captions' />
+            </audio>
+            <div class='flex flex-col'>
+                <span>{props.audio.title}</span>
+            </div>
+        </div>
+    );
 };
