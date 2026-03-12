@@ -17,7 +17,8 @@ export const SnippetCard: VoidComponent<Props> = (props) => {
         >
             <div class='h-80 w-full self-center'>
                 <textarea
-                    class='h-full w-full resize-none rounded-lg text-neutral-400'
+                    class='pointer-events-none h-full w-full select-none resize-none overflow-hidden rounded-lg text-neutral-400 focus:outline-none'
+                    readOnly
                     textContent={props.snippet.content}
                 />
             </div>
