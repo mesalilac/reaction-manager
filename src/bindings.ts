@@ -177,7 +177,11 @@ export type Image = {
     deletedAt: Timestamp | null;
     createdAt: Timestamp;
 };
-export type Setting = { id: number; minimizeOnCopy: boolean };
+export type Setting = {
+    id: number;
+    minimizeOnCopy: boolean;
+    defaultVolume: number | null;
+};
 export type Snippet = {
     id: string;
     title: string | null;
