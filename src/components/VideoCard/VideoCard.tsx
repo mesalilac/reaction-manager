@@ -1,5 +1,6 @@
 import { createVisibilityObserver } from '@solid-primitives/intersection-observer';
 import { convertFileSrc } from '@tauri-apps/api/core';
+import { openUrl } from '@tauri-apps/plugin-opener';
 import { createSignal, Show, type VoidComponent } from 'solid-js';
 import { toast } from 'solid-sonner';
 import { commands, type Video } from '@/bindings';
@@ -47,7 +48,16 @@ export const VideoCard: VoidComponent<Props> = (props) => {
     };
 
     const handleViewDetails = () => {};
-    const handleOpenExternalLink = () => {};
+    const handleOpenExternalLink = async () => {
+        if (!props.video.externalLink) {
+            toast.error('Video has no external link');
+            return;
+        }
+
+        await openUrl(props.video.externalLink).catch((e) => toast.error(e));
+
+        setShowPopoverMenu(false);
+    };
     const handleEditDetails = () => {};
     const handleDelete = () => {};
 

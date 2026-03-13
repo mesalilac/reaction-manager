@@ -1,5 +1,6 @@
 import { createVisibilityObserver } from '@solid-primitives/intersection-observer';
 import { convertFileSrc } from '@tauri-apps/api/core';
+import { openUrl } from '@tauri-apps/plugin-opener';
 import { decode } from 'blurhash';
 import { createSignal, onMount, Show, type VoidComponent } from 'solid-js';
 import { toast } from 'solid-sonner';
@@ -72,7 +73,16 @@ export const ImageCard: VoidComponent<Props> = (props) => {
     };
 
     const handleViewDetails = () => {};
-    const handleOpenExternalLink = () => {};
+    const handleOpenExternalLink = async () => {
+        if (!props.image.externalLink) {
+            toast.error('Image has no external link');
+            return;
+        }
+
+        await openUrl(props.image.externalLink).catch((e) => toast.error(e));
+
+        setShowPopoverMenu(false);
+    };
     const handleEditDetails = () => {};
     const handleDelete = () => {};
 

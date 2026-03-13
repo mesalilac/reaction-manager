@@ -1,5 +1,6 @@
 import { createVisibilityObserver } from '@solid-primitives/intersection-observer';
 import { convertFileSrc } from '@tauri-apps/api/core';
+import { openUrl } from '@tauri-apps/plugin-opener';
 import { createSignal, Show, type VoidComponent } from 'solid-js';
 import { toast } from 'solid-sonner';
 import { type Audio, commands } from '@/bindings';
@@ -47,7 +48,16 @@ export const AudioCard: VoidComponent<Props> = (props) => {
     };
 
     const handleViewDetails = () => {};
-    const handleOpenExternalLink = () => {};
+    const handleOpenExternalLink = async () => {
+        if (!props.audio.externalLink) {
+            toast.error('Audio has no external link');
+            return;
+        }
+
+        await openUrl(props.audio.externalLink).catch((e) => toast.error(e));
+
+        setShowPopoverMenu(false);
+    };
     const handleEditDetails = () => {};
     const handleDelete = () => {};
 

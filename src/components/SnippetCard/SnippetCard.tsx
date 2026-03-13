@@ -1,4 +1,5 @@
 import { createVisibilityObserver } from '@solid-primitives/intersection-observer';
+import { openUrl } from '@tauri-apps/plugin-opener';
 import { createSignal, Show, type VoidComponent } from 'solid-js';
 import { toast } from 'solid-sonner';
 import { commands, type Snippet } from '@/bindings';
@@ -48,7 +49,16 @@ export const SnippetCard: VoidComponent<Props> = (props) => {
     };
 
     const handleViewDetails = () => {};
-    const handleOpenExternalLink = () => {};
+    const handleOpenExternalLink = async () => {
+        if (!props.snippet.externalLink) {
+            toast.error('Snippet has no external link');
+            return;
+        }
+
+        await openUrl(props.snippet.externalLink).catch((e) => toast.error(e));
+
+        setShowPopoverMenu(false);
+    };
     const handleEditDetails = () => {};
     const handleDelete = () => {};
 
