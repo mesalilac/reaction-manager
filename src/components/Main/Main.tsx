@@ -1,12 +1,12 @@
 import { For, Match, Switch, type VoidComponent } from 'solid-js';
-import {
-    AudioCard,
-    Button,
-    ImageCard,
-    SnippetCard,
-    VideoCard,
-} from '@/components';
+
+import { Button } from '@/components';
 import { useGlobalData } from '@/store';
+
+import { AudioCard } from './AudioCard';
+import { ImageCard } from './ImageCard';
+import { SnippetCard } from './SnippetCard';
+import { VideoCard } from './VideoCard';
 
 type Props = {
     ref?: HTMLElement | ((el: HTMLElement) => void);
