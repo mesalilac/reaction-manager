@@ -3,14 +3,18 @@ import { convertFileSrc } from '@tauri-apps/api/core';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { createSignal, Show, type VoidComponent } from 'solid-js';
 import { toast } from 'solid-sonner';
+
 import { type Audio, commands } from '@/bindings';
 import { Button, ButtonIcon, IconMoreVertical, Popover } from '@/components';
+import { useGlobalData } from '@/store';
 
 type Props = {
     audio: Audio;
 };
 
 export const AudioCard: VoidComponent<Props> = (props) => {
+    const globalData = useGlobalData();
+
     let popoverMenuRef!: HTMLButtonElement;
     let containerRef!: HTMLDivElement;
 
@@ -82,7 +86,9 @@ export const AudioCard: VoidComponent<Props> = (props) => {
                     class='w-full focus:outline-none'
                     controls
                     ref={(el) => {
-                        el.volume = 0.1;
+                        el.volume =
+                            globalData.resources.settings.get()
+                                ?.defaultVolume || 0.1;
                     }}
                 >
                     <source

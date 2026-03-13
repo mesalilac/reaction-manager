@@ -3,14 +3,18 @@ import { convertFileSrc } from '@tauri-apps/api/core';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { createSignal, Show, type VoidComponent } from 'solid-js';
 import { toast } from 'solid-sonner';
+
 import { commands, type Video } from '@/bindings';
 import { Button, ButtonIcon, IconMoreVertical, Popover } from '@/components';
+import { useGlobalData } from '@/store';
 
 type Props = {
     video: Video;
 };
 
 export const VideoCard: VoidComponent<Props> = (props) => {
+    const globalData = useGlobalData();
+
     let popoverMenuRef!: HTMLButtonElement;
     let containerRef!: HTMLDivElement;
 
@@ -85,7 +89,9 @@ export const VideoCard: VoidComponent<Props> = (props) => {
                         controls
                         loop
                         ref={(el) => {
-                            el.volume = 0.1;
+                            el.volume =
+                                globalData.resources.settings.get()
+                                    ?.defaultVolume || 0.1;
                         }}
                     >
                         <source
