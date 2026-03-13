@@ -295,6 +295,20 @@ pub async fn util_copy_video(
     app_handle: tauri::AppHandle,
     id: String,
 ) -> CommandResult<()> {
+    let mut conn = state.pool.get()?;
+
+    let video_entity = videos::table
+        .find(id)
+        .get_result::<VideoEntity>(&mut conn)?;
+
+    let video = Video::from_entity(video_entity, Vec::new());
+
+    let clipboard = app_handle.clipboard_next();
+
+    clipboard
+        .write_files(vec![video.file_path.to_string_lossy().to_string()])
+        .map_err(|e| CommandError::Clipboard(e.to_string()))?;
+
     Ok(())
 }
 
