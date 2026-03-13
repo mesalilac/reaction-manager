@@ -36,25 +36,25 @@ export const Button: ParentComponent<Props> = (props) => {
 
     const variantStyles: Record<ButtonVariant, string> = {
         primary: clsx(
-            'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus-visible:ring-blue-600/50',
+            'bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-600/50 active:bg-blue-800',
         ),
         secondary: clsx(
-            'text-neutral-300 bg-neutral-500/50 hover:bg-neutral-600/50 active:bg-neutral-700/50 focus-visible:ring-neutral-600/50',
+            'bg-neutral-500/50 text-neutral-300 hover:bg-neutral-600/50 focus-visible:ring-neutral-600/50 active:bg-neutral-700/50',
         ),
         tertiary: clsx(
-            'text-neutral-300 bg-neutral-600/50 hover:bg-neutral-700/50 active:bg-neutral-800/50 focus-visible:ring-neutral-700/50',
+            'bg-neutral-600/50 text-neutral-300 hover:bg-neutral-700/50 focus-visible:ring-neutral-700/50 active:bg-neutral-800/50',
         ),
         success: clsx(
-            'bg-green-600 hover:bg-green-700 active:bg-green-800 focus-visible:ring-green-600/50',
+            'bg-green-600 hover:bg-green-700 focus-visible:ring-green-600/50 active:bg-green-800',
         ),
         danger: clsx(
-            'bg-red-600 hover:bg-red-700 active:bg-red-800 focus-visible:ring-red-600/50',
+            'bg-red-600 hover:bg-red-700 focus-visible:ring-red-600/50 active:bg-red-800',
         ),
         warning: clsx(
-            'bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 focus-visible:ring-yellow-600/50',
+            'bg-yellow-600 hover:bg-yellow-700 focus-visible:ring-yellow-600/50 active:bg-yellow-800',
         ),
         ghost: clsx(
-            'bg-transparent hover:bg-neutral-600/50 active:bg-neutral-700/50 focus-visible:ring-neutral-600/50',
+            'bg-transparent hover:bg-neutral-600/50 focus-visible:ring-neutral-600/50 active:bg-neutral-700/50',
         ),
     };
 
