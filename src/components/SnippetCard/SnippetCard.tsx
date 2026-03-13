@@ -1,6 +1,6 @@
-import type { VoidComponent } from 'solid-js';
+import { createSignal, Show, type VoidComponent } from 'solid-js';
 import type { Snippet } from '@/bindings';
-import { Button, ButtonIcon, IconMoreVertical } from '@/components';
+import { Button, ButtonIcon, IconMoreVertical, Popover } from '@/components';
 
 type Props = {
     snippet: Snippet;
@@ -8,12 +8,29 @@ type Props = {
 };
 
 export const SnippetCard: VoidComponent<Props> = (props) => {
+    let popoverMenuRef!: HTMLButtonElement;
+
+    const [showPopoverMenu, setShowPopoverMenu] = createSignal(false);
+
     const handleCopy = () => {};
+
+    const handleContextMenu = (e: MouseEvent) => {
+        e.preventDefault();
+
+        setShowPopoverMenu(true);
+    };
+
+    const handleViewDetails = () => {};
+    const handleOpenExternalLink = () => {};
+    const handleEditDetails = () => {};
+    const handleDelete = () => {};
 
     return (
         <div
             class='flex flex-col gap-4 rounded-lg bg-neutral-900 p-4'
+            onContextMenu={handleContextMenu}
             ref={props.ref}
+            role='none'
         >
             <div class='h-80 w-full self-center'>
                 <textarea
@@ -33,9 +50,48 @@ export const SnippetCard: VoidComponent<Props> = (props) => {
                         </Button>
                     </div>
                     <div class='flex flex-row gap-2'>
-                        <ButtonIcon>
+                        <ButtonIcon ref={popoverMenuRef}>
                             <IconMoreVertical />
                         </ButtonIcon>
+                        <Popover
+                            onOpenChange={setShowPopoverMenu}
+                            open={showPopoverMenu()}
+                            targetPositionArea='top center'
+                            triggerElement={popoverMenuRef}
+                        >
+                            <div class='rounded-lg bg-neutral-800 p-1 text-white'>
+                                <Button
+                                    class='w-full text-nowrap capitalize'
+                                    onClick={handleViewDetails}
+                                    variant='ghost'
+                                >
+                                    view details
+                                </Button>
+                                <Show when={props.snippet.externalLink}>
+                                    <Button
+                                        class='w-full text-nowrap capitalize'
+                                        onClick={handleOpenExternalLink}
+                                        variant='ghost'
+                                    >
+                                        open external link
+                                    </Button>
+                                </Show>
+                                <Button
+                                    class='w-full text-nowrap capitalize'
+                                    onClick={handleEditDetails}
+                                    variant='ghost'
+                                >
+                                    edit details
+                                </Button>
+                                <Button
+                                    class='w-full text-nowrap text-red-500 capitalize'
+                                    onClick={handleDelete}
+                                    variant='ghost'
+                                >
+                                    delete
+                                </Button>
+                            </div>
+                        </Popover>
                     </div>
                 </div>
             </div>

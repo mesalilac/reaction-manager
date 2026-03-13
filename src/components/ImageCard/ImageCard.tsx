@@ -3,7 +3,7 @@ import { decode } from 'blurhash';
 import { createSignal, onMount, Show, type VoidComponent } from 'solid-js';
 import { toast } from 'solid-sonner';
 import { commands, type Image } from '@/bindings';
-import { Button, ButtonIcon, IconMoreVertical } from '@/components';
+import { Button, ButtonIcon, IconMoreVertical, Popover } from '@/components';
 
 type Props = {
     image: Image;
@@ -11,8 +11,10 @@ type Props = {
 };
 
 export const ImageCard: VoidComponent<Props> = (props) => {
+    let popoverMenuRef!: HTMLButtonElement;
     let canvasRef!: HTMLCanvasElement;
 
+    const [showPopoverMenu, setShowPopoverMenu] = createSignal(false);
     const [loaded, setLoaded] = createSignal(false);
 
     onMount(() => {
@@ -55,10 +57,23 @@ export const ImageCard: VoidComponent<Props> = (props) => {
         toast.success('Image copied to clipboard');
     };
 
+    const handleContextMenu = (e: MouseEvent) => {
+        e.preventDefault();
+
+        setShowPopoverMenu(true);
+    };
+
+    const handleViewDetails = () => {};
+    const handleOpenExternalLink = () => {};
+    const handleEditDetails = () => {};
+    const handleDelete = () => {};
+
     return (
         <div
             class='flex flex-col gap-4 rounded-lg bg-neutral-900 p-4'
+            onContextMenu={handleContextMenu}
             ref={props.ref}
+            role='none'
         >
             <div class='h-80 w-full self-center'>
                 <Show when={!loaded()}>
@@ -85,9 +100,48 @@ export const ImageCard: VoidComponent<Props> = (props) => {
                         </Button>
                     </div>
                     <div class='flex flex-row gap-2'>
-                        <ButtonIcon>
+                        <ButtonIcon ref={popoverMenuRef}>
                             <IconMoreVertical />
                         </ButtonIcon>
+                        <Popover
+                            onOpenChange={setShowPopoverMenu}
+                            open={showPopoverMenu()}
+                            targetPositionArea='top center'
+                            triggerElement={popoverMenuRef}
+                        >
+                            <div class='rounded-lg bg-neutral-800 p-1 text-white'>
+                                <Button
+                                    class='w-full text-nowrap capitalize'
+                                    onClick={handleViewDetails}
+                                    variant='ghost'
+                                >
+                                    view details
+                                </Button>
+                                <Show when={props.image.externalLink}>
+                                    <Button
+                                        class='w-full text-nowrap capitalize'
+                                        onClick={handleOpenExternalLink}
+                                        variant='ghost'
+                                    >
+                                        open external link
+                                    </Button>
+                                </Show>
+                                <Button
+                                    class='w-full text-nowrap capitalize'
+                                    onClick={handleEditDetails}
+                                    variant='ghost'
+                                >
+                                    edit details
+                                </Button>
+                                <Button
+                                    class='w-full text-nowrap text-red-500 capitalize'
+                                    onClick={handleDelete}
+                                    variant='ghost'
+                                >
+                                    delete
+                                </Button>
+                            </div>
+                        </Popover>
                     </div>
                 </div>
             </div>
