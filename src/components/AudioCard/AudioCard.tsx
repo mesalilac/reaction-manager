@@ -38,7 +38,7 @@ export const AudioCard: VoidComponent<Props> = (props) => {
             ref={props.ref}
             role='none'
         >
-            <audio class='w-full' controls ref={audioRef}>
+            <audio class='w-full focus:outline-none' controls ref={audioRef}>
                 <source
                     src={convertFileSrc(props.audio.filePath)}
                     type={props.audio.mimeType}

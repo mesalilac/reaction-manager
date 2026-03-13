@@ -39,7 +39,11 @@ export const VideoCard: VoidComponent<Props> = (props) => {
             role='none'
         >
             <div class='h-80 w-full self-center'>
-                <video class='h-full w-full rounded-lg' controls ref={videoRef}>
+                <video
+                    class='h-full w-full rounded-lg focus:outline-none'
+                    controls
+                    ref={videoRef}
+                >
                     <source
                         src={convertFileSrc(props.video.filePath)}
                         type={props.video.mimeType}
