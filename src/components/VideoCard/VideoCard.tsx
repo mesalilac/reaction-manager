@@ -1,6 +1,6 @@
 import { createVisibilityObserver } from '@solid-primitives/intersection-observer';
 import { convertFileSrc } from '@tauri-apps/api/core';
-import { createSignal, onMount, Show, type VoidComponent } from 'solid-js';
+import { createSignal, Show, type VoidComponent } from 'solid-js';
 import type { Video } from '@/bindings';
 import { Button, ButtonIcon, IconMoreVertical, Popover } from '@/components';
 
@@ -10,7 +10,6 @@ type Props = {
 
 export const VideoCard: VoidComponent<Props> = (props) => {
     let popoverMenuRef!: HTMLButtonElement;
-    let videoRef!: HTMLVideoElement;
     let containerRef!: HTMLDivElement;
 
     const [showPopoverMenu, setShowPopoverMenu] = createSignal(false);
@@ -21,10 +20,6 @@ export const VideoCard: VoidComponent<Props> = (props) => {
     });
 
     const containerVisible = useVisibilityObserver(() => containerRef);
-
-    onMount(() => {
-        if (videoRef) videoRef.volume = 0.1;
-    });
 
     const handleCopy = () => {};
 
@@ -53,7 +48,9 @@ export const VideoCard: VoidComponent<Props> = (props) => {
                         class='h-full w-full rounded-lg focus:outline-none'
                         controls
                         loop
-                        ref={videoRef}
+                        ref={(el) => {
+                            el.volume = 0.1;
+                        }}
                     >
                         <source
                             src={convertFileSrc(props.video.filePath)}
