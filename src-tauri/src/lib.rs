@@ -2,6 +2,7 @@ mod bridge;
 mod cli;
 mod commands;
 mod database;
+mod events;
 mod schema;
 mod services;
 mod utils;
@@ -10,9 +11,10 @@ use clap::Parser;
 use cli::Cli;
 use commands::*;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
+use events::*;
 use specta_typescript::{BigIntExportBehavior, Typescript};
 use tauri::Manager;
-use tauri_specta::{collect_commands, Builder};
+use tauri_specta::{collect_commands, collect_events, Builder};
 
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!("migrations");
 const APP_NAME: &str = "com.mesalilac.reaction-manager";
@@ -85,20 +87,22 @@ pub fn run() {
         };
     }
 
-    let specta_builder = Builder::<tauri::Wry>::new().commands(collect_commands![
-        get_images,
-        get_videos,
-        get_audio,
-        get_snippets,
-        get_tags,
-        get_settings,
-        get_general_stats,
-        util_drop_files,
-        util_copy_image,
-        util_copy_video,
-        util_copy_audio,
-        util_copy_snippet
-    ]);
+    let specta_builder = Builder::<tauri::Wry>::new()
+        .commands(collect_commands![
+            get_images,
+            get_videos,
+            get_audio,
+            get_snippets,
+            get_tags,
+            get_settings,
+            get_general_stats,
+            util_drop_files,
+            util_copy_image,
+            util_copy_video,
+            util_copy_audio,
+            util_copy_snippet
+        ])
+        .events(collect_events![FileProcessingProgress]);
 
     #[cfg(debug_assertions)]
     specta_builder

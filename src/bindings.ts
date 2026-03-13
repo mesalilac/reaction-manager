@@ -125,6 +125,12 @@ export const commands = {
 
 /** user-defined events **/
 
+export const events = __makeEvents__<{
+    fileProcessingProgress: FileProcessingProgress;
+}>({
+    fileProcessingProgress: 'file-processing-progress',
+});
+
 /** user-defined constants **/
 
 /** user-defined types **/
@@ -152,6 +158,7 @@ export type CommandError =
     | { kind: 'Io'; message: string }
     | { kind: 'Clipboard'; message: string }
     | { kind: 'Unknown'; message: string };
+export type FileProcessingProgress = { current: number; total: number };
 export type GeneralStats = {
     imageCount: number;
     videoCount: number;
