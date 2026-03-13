@@ -6,7 +6,7 @@ import { createSignal, onCleanup, onMount } from 'solid-js';
 import { Portal } from 'solid-js/web';
 import { toast } from 'solid-sonner';
 
-import { commands } from '@/bindings';
+import { commands, events } from '@/bindings';
 import { useGlobalData } from '@/store';
 
 type Props = {
@@ -22,25 +22,48 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
     onMount(() => {
         const dropListener = listen<Extract<DragDropEvent, { type: 'drop' }>>(
             TauriEvent.DRAG_DROP,
-            (e) => {
+            async (e) => {
                 setIsDragActive(false);
 
                 if (e.payload.paths.length === 0) return;
 
-                toast.promise(commands.utilDropFiles(e.payload.paths), {
-                    loading: `Processing ${filesCount()} file(s)`,
-                    success: (e) => {
-                        if (e.status === 'ok') {
-                            globalData.resources.images.refetch();
-                            globalData.resources.videos.refetch();
-                            globalData.resources.audio.refetch();
-                            globalData.resources.generalStats.refetch();
-
-                            return `File(s) processed: ${e.data}`;
-                        } else return `Processing error: ${e.error}`;
-                    },
-                    error: 'Failed to process file(s)',
+                const toastId = toast(`Processing ${filesCount()} file(s)`, {
+                    duration: Number.POSITIVE_INFINITY,
                 });
+
+                events.fileProcessingProgress.listen((processingEvent) => {
+                    toast.loading(
+                        `Processed ${processingEvent.payload.current} file(s)`,
+                        {
+                            id: toastId,
+                        },
+                    );
+                });
+
+                const res = await commands
+                    .utilDropFiles(e.payload.paths)
+                    .catch((e) => {
+                        toast.error(e);
+                        toast.dismiss(toastId);
+                    });
+
+                if (!res) return;
+
+                if (res.status === 'error') {
+                    toast.error(res.error.kind, {
+                        description: res.error.message,
+                        id: toastId,
+                    });
+                    toast.dismiss(toastId);
+
+                    return;
+                }
+
+                toast.success(`File(s) processed: ${res.data}`, {
+                    id: toastId,
+                });
+
+                toast.dismiss(toastId);
             },
         );
 
