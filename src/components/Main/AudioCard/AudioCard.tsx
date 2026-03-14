@@ -5,7 +5,13 @@ import { createSignal, Show, type VoidComponent } from 'solid-js';
 import { toast } from 'solid-sonner';
 
 import { type Audio, commands } from '@/bindings';
-import { Button, ButtonIcon, IconMoreVertical, Popover } from '@/components';
+import {
+    Button,
+    ButtonIcon,
+    IconMoreVertical,
+    Menu,
+    Popover,
+} from '@/components';
 import { useGlobalData } from '@/store';
 
 type Props = {
@@ -118,38 +124,30 @@ export const AudioCard: VoidComponent<Props> = (props) => {
                             targetPositionArea='top center'
                             triggerElement={popoverMenuRef}
                         >
-                            <div class='rounded-lg bg-neutral-800 p-1 text-white'>
-                                <Button
-                                    class='w-full text-nowrap capitalize'
-                                    onClick={handleViewDetails}
-                                    variant='ghost'
-                                >
+                            <Menu
+                                open={showPopoverMenu()}
+                                setOpen={setShowPopoverMenu}
+                            >
+                                <Menu.Item onClick={handleViewDetails}>
                                     view details
-                                </Button>
-                                <Show when={props.audio.externalLink}>
-                                    <Button
-                                        class='w-full text-nowrap capitalize'
-                                        onClick={handleOpenExternalLink}
-                                        variant='ghost'
-                                    >
-                                        open external link
-                                    </Button>
-                                </Show>
-                                <Button
-                                    class='w-full text-nowrap capitalize'
-                                    onClick={handleEditDetails}
-                                    variant='ghost'
-                                >
+                                </Menu.Item>
+                                <Menu.Item onClick={handleEditDetails}>
                                     edit details
-                                </Button>
-                                <Button
-                                    class='w-full text-nowrap text-red-500 capitalize'
+                                </Menu.Item>
+                                <Show when={props.audio.externalLink}>
+                                    <Menu.Separator />
+                                    <Menu.Item onClick={handleOpenExternalLink}>
+                                        open external link
+                                    </Menu.Item>
+                                </Show>
+                                <Menu.Separator />
+                                <Menu.Item
+                                    class='text-red-500'
                                     onClick={handleDelete}
-                                    variant='ghost'
                                 >
                                     delete
-                                </Button>
-                            </div>
+                                </Menu.Item>
+                            </Menu>
                         </Popover>
                     </div>
                 </div>
