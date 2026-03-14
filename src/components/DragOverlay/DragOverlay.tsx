@@ -18,12 +18,20 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
 
     const [isDragActive, setIsDragActive] = createSignal(false);
     const [filesCount, setFilesCount] = createSignal(0);
+    const [processingFiles, setProcessingFiles] = createSignal(false);
 
     onMount(() => {
         const dropListener = listen<Extract<DragDropEvent, { type: 'drop' }>>(
             TauriEvent.DRAG_DROP,
             async (e) => {
                 setIsDragActive(false);
+
+                if (processingFiles()) {
+                    toast.error('Files are being processed. Please wait.');
+                    return;
+                }
+
+                setProcessingFiles(true);
 
                 if (e.payload.paths.length === 0) return;
 
@@ -44,6 +52,7 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
                     .utilDropFiles(e.payload.paths)
                     .catch((e) => {
                         toast.error(e);
+                        setProcessingFiles(false);
                         toast.dismiss(toastId);
                     });
 
@@ -54,6 +63,7 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
                         description: res.error.message,
                         id: toastId,
                     });
+                    setProcessingFiles(false);
                     toast.dismiss(toastId);
 
                     return;
@@ -68,6 +78,7 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
                     id: toastId,
                 });
 
+                setProcessingFiles(false);
                 toast.dismiss(toastId);
             },
         );
