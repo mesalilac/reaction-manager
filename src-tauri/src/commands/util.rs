@@ -122,6 +122,8 @@ pub async fn util_drop_files(
         }
     }
 
+    let files_count = files.len() as i32;
+
     for item in files {
         if item.file_type.matcher_type() == infer::MatcherType::Image {
             let Ok(image_exists) = select(exists(
@@ -338,6 +340,7 @@ pub async fn util_drop_files(
 
         let _ = FileProcessingProgress {
             current: total_processed_files,
+            total: files_count,
         }
         .emit(&app_handle);
     }

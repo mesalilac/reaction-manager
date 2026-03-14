@@ -158,7 +158,7 @@ export type CommandError =
     | { kind: 'Io'; message: string }
     | { kind: 'Clipboard'; message: string }
     | { kind: 'Unknown'; message: string };
-export type FileProcessingProgress = { current: number };
+export type FileProcessingProgress = { current: number; total: number };
 export type GeneralStats = {
     imageCount: number;
     videoCount: number;
