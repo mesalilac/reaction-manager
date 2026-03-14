@@ -1,5 +1,14 @@
-import { For, Match, Switch, type VoidComponent } from 'solid-js';
+import {
+    createMemo,
+    createSignal,
+    For,
+    Match,
+    Show,
+    Switch,
+    type VoidComponent,
+} from 'solid-js';
 
+import type { Audio, Image, Video } from '@/bindings';
 import { Button, Input } from '@/components';
 import { useGlobalData } from '@/store';
 
@@ -15,15 +24,94 @@ type Props = {
 export const Main: VoidComponent<Props> = (props) => {
     const globalData = useGlobalData();
 
+    const [searchQuery, setSearchQuery] = createSignal('');
+
+    const filterList = (item: Image | Video | Audio) => {
+        const query = searchQuery().toLowerCase();
+
+        const title = item.title?.toLowerCase();
+        const description = item.description?.toLowerCase();
+        const fileName = item.fileName.toLowerCase();
+
+        return (
+            title?.includes(query) ||
+            description?.includes(query) ||
+            fileName.includes(query)
+        );
+    };
+
+    const sortedImages = createMemo(() => {
+        const list = [...(globalData.resources.images.get() || [])];
+
+        const filtered = list.filter(filterList);
+
+        return filtered;
+    });
+
+    const sortedVideos = createMemo(() => {
+        const list = [...(globalData.resources.videos.get() || [])];
+
+        const filtered = list.filter(filterList);
+
+        return filtered;
+    });
+
+    const sortedAudio = createMemo(() => {
+        const list = [...(globalData.resources.audio.get() || [])];
+
+        const filtered = list.filter(filterList);
+
+        return filtered;
+    });
+
+    const sortedSnippets = createMemo(() => {
+        const list = [...(globalData.resources.snippets.get() || [])];
+        const query = searchQuery().toLowerCase();
+
+        const filtered = list.filter((item) => {
+            const title = item.title?.toLowerCase();
+            const description = item.description?.toLowerCase();
+            const content = item.content.toLowerCase();
+
+            return (
+                title?.includes(query) ||
+                description?.includes(query) ||
+                content.includes(query)
+            );
+        });
+
+        return filtered;
+    });
+
     const imagesTabActive = () => globalData.store.activeTab === 'Images';
     const videosTabActive = () => globalData.store.activeTab === 'Videos';
     const audioTabActive = () => globalData.store.activeTab === 'Audio';
     const snippetsTabActive = () => globalData.store.activeTab === 'Snippets';
 
+    const itemsCount = () => {
+        switch (globalData.store.activeTab) {
+            case 'Images':
+                return sortedImages().length;
+            case 'Videos':
+                return sortedVideos().length;
+            case 'Audio':
+                return sortedAudio().length;
+            case 'Snippets':
+                return sortedSnippets().length;
+            default:
+                return 0;
+        }
+    };
+
     return (
         <main class='flex flex-col gap-4' ref={props.ref}>
             <div class='flex justify-between'>
-                <Input placeholder='Search...' type='search' />
+                <Input
+                    onInput={(e) => setSearchQuery(e.target.value.trim())}
+                    placeholder='Search...'
+                    type='search'
+                    value={searchQuery()}
+                />
 
                 <div class='flex gap-2'>
                     <Button variant='secondary'>Filter</Button>
@@ -31,25 +119,30 @@ export const Main: VoidComponent<Props> = (props) => {
                     <Button variant='secondary'>Sort direction</Button>
                 </div>
             </div>
+            <Show when={searchQuery()}>
+                <span>
+                    Found {itemsCount()} Results for: '{searchQuery()}'
+                </span>
+            </Show>
             <div class='grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4'>
                 <Switch>
                     <Match when={imagesTabActive()}>
-                        <For each={globalData.resources.images.get() || []}>
+                        <For each={sortedImages()}>
                             {(item) => <ImageCard image={item} />}
                         </For>
                     </Match>
                     <Match when={videosTabActive()}>
-                        <For each={globalData.resources.videos.get() || []}>
+                        <For each={sortedVideos()}>
                             {(item) => <VideoCard video={item} />}
                         </For>
                     </Match>
                     <Match when={audioTabActive()}>
-                        <For each={globalData.resources.audio.get() || []}>
+                        <For each={sortedAudio()}>
                             {(item) => <AudioCard audio={item} />}
                         </For>
                     </Match>
                     <Match when={snippetsTabActive()}>
-                        <For each={globalData.resources.snippets.get() || []}>
+                        <For each={sortedSnippets()}>
                             {(item) => <SnippetCard snippet={item} />}
                         </For>
                     </Match>
