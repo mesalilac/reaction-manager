@@ -35,7 +35,7 @@ export const DragOverlay: VoidComponent<Props> = (props) => {
 
                 if (e.payload.paths.length === 0) return;
 
-                const toastId = toast(`Processing ${filesCount()} file(s)`, {
+                const toastId = toast('Processing file(s)...', {
                     duration: Number.POSITIVE_INFINITY,
                 });
 
